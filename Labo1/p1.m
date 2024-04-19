@@ -1,15 +1,36 @@
-
-a=10; %liczba punktów kształtu
-A = rand(a,2); %punkty kształtu
-
-
-p= rand(2);
-calosc=0;
-przeciecia=0;
-for i=1:size(A,1)-1;
-    calosc=calosc+1;
-    przeciecia +=czyPrzecina(A(i,:),A(i+1,:),p,[p(1),0]);
+plikiksztaltow = {'kwadrat.txt','trojkat.txt','romb.txt','smieszne.txt'};
+obliczonepola = [0.25,0.5,0.4,0.375];
+for l=1:4
+    
+    A=load(plikiksztaltow{l})
+    wlasciwepole=obliczonepola(l)
+    
+    n=1;
+    pole = [];
+    liczbaprob = [];
+    wlasciwalinia=[];
+    
+    makseksponent=7; %liczba prób
+    mnoznik=5; %zwiększenie w każdym kroku
+    
+    for s=1:makseksponent
+        n=n*mnoznik;
+        calosc=0; %calkowita liczba prob
+        wewnatrz=0; %liczba punktow wewnatrz ksztaltu
+        for a=1:n
+            if czyPunktWSrodku(rand(2,2),A)
+                wewnatrz=wewnatrz+1;
+            end
+        end
+        wlasciwalinia=[wlasciwalinia,wlasciwepole];
+        liczbaprob=[liczbaprob,n];
+        pole=[pole,wewnatrz/n];
+    end
+    
+    semilogx(liczbaprob,pole,'b',liczbaprob,wlasciwalinia);
+    title(plikiksztaltow{l});
 end
+pole(makseksponent)
 
 %sprawdzenie przecięcia linii wyznacznikiem macierzy
 %czy punkt jest w figurze - liczba przecięć linii pionowej
